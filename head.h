@@ -18,8 +18,8 @@
 # include <unistd.h>
 # include <math.h>
 
-# define SIZE_WIN_X 270*6
-# define SIZE_WIN_Y 240*6
+# define SIZE_WIN_X 270*3
+# define SIZE_WIN_Y 240*3
 
 typedef unsigned char	t_byte;
 
@@ -38,6 +38,10 @@ typedef struct	s_env
 	void		*mlx;
 	void		*win;
 	t_img		img;
+	int			zoom;
+	int			re;
+	int			xoff;
+	int			yoff;
 }				t_env;
 
 typedef struct	s_pos
@@ -70,5 +74,10 @@ void			ft_line_put_2(t_line line, t_img img);
 t_color			ft_rgb_to_color(t_byte r, t_byte g, t_byte b);
 void			ft_put_pixel_img(t_pos point, t_img img);
 t_pos			ft_new_point(int x, int y);
+void			GiveRainbowColor(double position, t_env *env);
+int 			mousehook(int button, int x, int y, t_env *env);
+int				keyhook(int keycode, t_env *env);
+void			var_init(t_env *env);
+int				loophook(t_env *env);
 
 #endif

@@ -17,9 +17,9 @@ t_color	ft_rgb_to_color(unsigned char r, unsigned char g, unsigned char b)
 	t_color color;
 
 	if(r > b)
-		b = r / 2, r = b / 2;
+		b = 0, r = b / 2;
 	if (g > b)
-		b = g / 2, g = b / 4;
+		b = 0, g = b / 4;
 
 	color.r = r;
 	color.g = g;

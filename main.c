@@ -135,13 +135,13 @@ int 	mousehook(int button, int x, int y, t_env *env)
 	if (button == 4)
 	{
 		env->zoom += 10;
-		env->xoff += (x - (SIZE_WIN_X / 2));
-		env->yoff += (y - (SIZE_WIN_Y / 2));
+		printf("%d\n", (x - (SIZE_WIN_X / 2)));
+		env->xoff -= (x - (SIZE_WIN_X / 2));
+		env->yoff -= (y - (SIZE_WIN_Y / 2));
 		env->re = 1;
 	}
 	if (button == 5)
 		env->zoom -= 10, env->re = 1;
-	printf("x = %d, y = %d, button = %d\n", x, y, button);
 	return (0);
 }
 

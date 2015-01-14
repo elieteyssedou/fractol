@@ -65,12 +65,12 @@ void	mandelbrot(t_env *env)
 	int x;
 	int y;
 	float x1 = - 2.1;
-	float x2 = 0.6;
+	//float x2 = 0.6;
 	float y1 = - 1.2;
-	float y2 = 1.2;
-	int ite_max = 25;
-	int image_x = (x2 - x1) * env->zoom;
-	int image_y = (y2 - y1) * env->zoom;
+	//float y2 = 1.2;
+	// int image_x = (x2 - x1) * env->zoom;
+	// printf("%d\n", image_x);
+	// int image_y = (y2 - y1) * env->zoom;
 	float c_r;
 	float c_i;
 	float z_r;
@@ -80,24 +80,24 @@ void	mandelbrot(t_env *env)
 
 	x = 0;
 	y = 0;
-	while (x < image_x)
+	while (x < SIZE_WIN_X)
 	{
 		y = 0;
-		while (y < image_y)
+		while (y < SIZE_WIN_Y)
 		{
-			c_r = (float)(x + env->xoff) / (float)env->zoom + (float)x1;
-			c_i = (float)(y + env->yoff) / (float)env->zoom + (float)y1;
+			c_r = (float)(x + env->xoff) / env->zoom + (float)x1;
+			c_i = (float)(y + env->yoff) / env->zoom + (float)y1;
 			z_r = 0;
 			z_i = 0;
 			i = 0;
-			while ((z_r * z_r) + (z_i * z_i) < 4 && i < ite_max)
+			while ((z_r * z_r) + (z_i * z_i) < 4 && i < env->ite_max)
 			{
 				tz_r = z_r;
 				z_r = (z_r * z_r) - (z_i * z_i) + c_r;
 				z_i = (2 * z_i * tz_r) + c_i;
 				i++;
 			}
-			GiveRainbowColor((double)i / (double)ite_max, env);
+			GiveRainbowColor((double)i / (double)env->ite_max, env);
 			// if (i == ite_max)
 				ft_put_pixel_img(ft_new_point(x, y), env->img);
 			y++;
@@ -112,6 +112,7 @@ void	var_init(t_env *env)
 	env->re = 1;
 	env->xoff = 0;
 	env->yoff = 0;
+	env->ite_max = 50;
 }
 
 int 	keyhook(int keycode, t_env *env)
@@ -124,6 +125,8 @@ int 	keyhook(int keycode, t_env *env)
 		env->zoom += 10, env->re = 1;
 	if (keycode == 65453)
 		env->zoom -= 10, env->re = 1;
+	if (keycode == 32)
+		env->ite_max += 100, env->re = 1;
 	// printf("%d\n", keycode);
 	return (0);
 }
@@ -134,14 +137,18 @@ int 	mousehook(int button, int x, int y, t_env *env)
 
 	if (button == 4)
 	{
-		env->zoom += 10;
-		printf("%d\n", (x - (SIZE_WIN_X / 2)));
-		env->xoff -= (x - (SIZE_WIN_X / 2));
-		env->yoff -= (y - (SIZE_WIN_Y / 2));
+		env->zoom *= ZOOM;
+		env->xoff = (env->xoff + ((SIZE_WIN_X - (SIZE_WIN_X / ZOOM)) / 2) + (x - SIZE_WIN_X / 2) * (1 - (1 / ZOOM))) * ZOOM;
+		env->yoff = (env->yoff + ((SIZE_WIN_Y - (SIZE_WIN_Y / ZOOM)) / 2) + (y - SIZE_WIN_Y / 2) * (1 - (1 / ZOOM))) * ZOOM;
 		env->re = 1;
 	}
 	if (button == 5)
-		env->zoom -= 10, env->re = 1;
+	{
+		env->zoom /= ZOOM;
+		env->xoff = env->xoff / ZOOM - ((SIZE_WIN_X - (SIZE_WIN_X / ZOOM)) / 2) / ZOOM - (x - SIZE_WIN_X / 2) * ZOOM + (x - SIZE_WIN_X / 2);
+		env->yoff = env->yoff / ZOOM - ((SIZE_WIN_Y - (SIZE_WIN_Y / ZOOM)) / 2) / ZOOM - (y - SIZE_WIN_Y / 2) * ZOOM + (y - SIZE_WIN_Y / 2);
+		env->re = 1;
+	}
 	return (0);
 }
 

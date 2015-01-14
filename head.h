@@ -18,8 +18,9 @@
 # include <unistd.h>
 # include <math.h>
 
-# define SIZE_WIN_X 270*3
-# define SIZE_WIN_Y 240*3
+# define SIZE_WIN_X 810
+# define SIZE_WIN_Y 720
+# define ZOOM 1.1
 
 typedef unsigned char	t_byte;
 
@@ -42,6 +43,7 @@ typedef struct	s_env
 	int			re;
 	int			xoff;
 	int			yoff;
+	int			ite_max;
 }				t_env;
 
 typedef struct	s_pos

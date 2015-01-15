@@ -21,7 +21,7 @@ CC		=	gcc
 all: $(NAME)
 
 %.o: %.c
-	@$(CC) -O3 $(FLAGS) -I $(HDR) -I . -o $@ -c $?
+	@$(CC) -O3 $(FLAGS) -I $(HDR) -I . -o $@ -c $? -I /opt/X11/include/
 
 $(NAME): $(OBJ)
 	@make -C libft/ fclean

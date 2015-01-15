@@ -17,6 +17,7 @@
 # include <mlx.h>
 # include <unistd.h>
 # include <math.h>
+# include <X11/Xlib.h>
 
 # define SIZE_WIN_X 810
 # define SIZE_WIN_Y 720
@@ -44,6 +45,9 @@ typedef struct	s_env
 	int			xoff;
 	int			yoff;
 	int			ite_max;
+	float		c_r;
+	float		c_i;
+	int			f;
 }				t_env;
 
 typedef struct	s_pos
@@ -81,5 +85,6 @@ int 			mousehook(int button, int x, int y, t_env *env);
 int				keyhook(int keycode, t_env *env);
 void			var_init(t_env *env);
 int				loophook(t_env *env);
+int				mousemove(int x, int y, t_env *env);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: eteyssed <eteyssed@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/24 17:51:10 by eteyssed          #+#    #+#             */
-/*   Updated: 2014/11/24 17:51:31 by eteyssed         ###   ########.fr       */
+/*   Updated: 2015/01/29 17:43:03 by eteyssed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,54 @@ void	mandelbrot(t_env *env)
 {
 	int x;
 	int y;
+	long double x1 = - 2.1;
+	//long double x2 = 0.6;
+	long double y1 = - 1.2;
+	//long double y2 = 1.2;
+	// int image_x = (x2 - x1) * env->zoom;
+	// printf("%d\n", image_x);
+	// int image_y = (y2 - y1) * env->zoom;
+	long double c_r;
+	long double c_i;
+	long double z_r;
+	long double z_i;
+	long double tz_r;
+	int i;
+
+	x = 0;
+	y = 0;
+	while (x < SIZE_WIN_X)
+	{
+		y = 0;
+		while (y < SIZE_WIN_Y)
+		{
+			c_r = (long double)(x + env->xoff) / env->zoom + (long double)x1;
+			c_i = (long double)(y + env->yoff) / env->zoom + (long double)y1;
+			// c_r = 0.3;
+			// c_i = 0.5;
+			z_r = 0.0;
+			z_i = 0.0;
+			i = 0;
+			while ((z_r * z_r) + (z_i * z_i) < 4.0 && i < env->ite_max)
+			{
+				tz_r = z_r;
+				z_r = (z_r * z_r) - (z_i * z_i) + c_r;
+				z_i = (2.0 * z_i * tz_r) + c_i;
+				i++;
+			}
+			GiveRainbowColor((double)i / (double)env->ite_max, env);
+			// if (i == ite_max)
+				ft_put_pixel_img(ft_new_point(x, y), env->img);
+			y++;
+		}
+		x++;
+	}
+}
+
+void	mandelbrot2(t_env *env)
+{
+	int x;
+	int y;
 	float x1 = - 2.1;
 	//float x2 = 0.6;
 	float y1 = - 1.2;
@@ -75,7 +123,8 @@ void	mandelbrot(t_env *env)
 	float c_i;
 	float z_r;
 	float z_i;
-	float tz_r;
+	float tz_r = 0;
+	float tz_i = 0;
 	int i;
 
 	x = 0;
@@ -87,16 +136,17 @@ void	mandelbrot(t_env *env)
 		{
 			c_r = (float)(x + env->xoff) / env->zoom + (float)x1;
 			c_i = (float)(y + env->yoff) / env->zoom + (float)y1;
-			// c_r = 0.3;
-			// c_i = 0.5;
 			z_r = 0;
 			z_i = 0;
 			i = 0;
-			while ((z_r * z_r) + (z_i * z_i) < 4 && i < env->ite_max)
+			while (((z_r * z_r) + (z_i * z_i)) < 4 && i < env->ite_max)
 			{
 				tz_r = z_r;
+				tz_i = z_i;
 				z_r = (z_r * z_r) - (z_i * z_i) + c_r;
 				z_i = (2 * z_i * tz_r) + c_i;
+				z_r += tz_r;
+				z_i += tz_i;
 				i++;
 			}
 			GiveRainbowColor((double)i / (double)env->ite_max, env);
@@ -151,7 +201,7 @@ void	var_init(t_env *env)
 	env->re = 1;
 	env->xoff = 0;
 	env->yoff = 0;
-	env->ite_max = 50;
+	env->ite_max = 100;
 	env->c_i = 0;
 	env->c_r = 0;
 	env->f = 0;
@@ -183,8 +233,8 @@ int		mousemove(int x, int y, t_env *env)
 {
 	if (env->f == 0)
 		{
-			env->c_r = (float)(x - SIZE_WIN_X / 2) / (float)env->zoom;
-			env->c_i = (float)(y - SIZE_WIN_Y / 2) / (float)env->zoom;
+			env->c_r = (long double)(x - SIZE_WIN_X / 2) / (long double)env->zoom;
+			env->c_i = (long double)(y - SIZE_WIN_Y / 2) / (long double)env->zoom;
 			env->re = 1;
 		}
 	return (0);
@@ -200,6 +250,8 @@ int 	mousehook(int button, int x, int y, t_env *env)
 		env->xoff = (env->xoff + ((SIZE_WIN_X - (SIZE_WIN_X / ZOOM)) / 2) + (x - SIZE_WIN_X / 2) * (1 - (1 / ZOOM))) * ZOOM;
 		env->yoff = (env->yoff + ((SIZE_WIN_Y - (SIZE_WIN_Y / ZOOM)) / 2) + (y - SIZE_WIN_Y / 2) * (1 - (1 / ZOOM))) * ZOOM;
 		env->re = 1;
+		//printf("ZOOM = %d\n", env->zoom);
+		//printf("XOFF = %d\n", env->xoff);
 	}
 	if (button == 5)
 	{
@@ -207,6 +259,7 @@ int 	mousehook(int button, int x, int y, t_env *env)
 		env->xoff = env->xoff / ZOOM - ((SIZE_WIN_X - (SIZE_WIN_X / ZOOM)) / 2) / ZOOM - (x - SIZE_WIN_X / 2) * ZOOM + (x - SIZE_WIN_X / 2);
 		env->yoff = env->yoff / ZOOM - ((SIZE_WIN_Y - (SIZE_WIN_Y / ZOOM)) / 2) / ZOOM - (y - SIZE_WIN_Y / 2) * ZOOM + (y - SIZE_WIN_Y / 2);
 		env->re = 1;
+		//printf("ZOOM = %d\n", env->zoom);
 	}
 	if (button == 1)
 	{
@@ -223,8 +276,8 @@ int		loophook(t_env *env)
 	if (env->re == 1)
 	{
 		ft_bzero(env->img.data, 4 * SIZE_WIN_X * SIZE_WIN_Y);
-		//mandelbrot(env);
-		julia(env);
+		mandelbrot(env);
+		//julia(env);
 		env->re = 0;
 		mlx_put_image_to_window(env->mlx, env->win, env->img.img, 0, 0);
 	}

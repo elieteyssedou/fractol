@@ -40,10 +40,10 @@ typedef struct	s_env
 	void		*mlx;
 	void		*win;
 	t_img		img;
-	int			zoom;
+	double			zoom;
 	int			re;
-	int			xoff;
-	int			yoff;
+	double		xoff;
+	double		yoff;
 	int			ite_max;
 	float		c_r;
 	float		c_i;

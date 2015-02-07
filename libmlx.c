@@ -6,7 +6,7 @@
 /*   By: eteyssed <eteyssed@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/12/08 14:06:22 by eteyssed          #+#    #+#             */
-/*   Updated: 2014/12/08 14:06:22 by eteyssed         ###   ########.fr       */
+/*   Updated: 2015/01/29 17:42:53 by eteyssed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,10 @@ t_color	ft_rgb_to_color(unsigned char r, unsigned char g, unsigned char b)
 {
 	t_color color;
 
-	// if(r > b)
-	// 	b = 0, r = b / 2;
-	// if (g > b)
-	// 	b = 0, g = b / 4;
+	//if(r > b)
+	//	b = 0, r = b / 2;
+	//if (g > b)
+	//	b = 0, g = b / 4;
 
 	color.r = r;
 	color.g = g;
